@@ -31,15 +31,30 @@ def bt(url,proxies):
 			response = requests.get(url=url,headers=headers,timeout=60,proxies=proxies)
 		except Exception as e:
 			url = url.replace('http://','')
-			out = url + ' ----- 无法连接！----- ' + str(e)
+			out = url + ' ----- 无法连接 ----- ' + str(e)
 			print(out)
 			log(out)
 			return False
 
 	try:
-		content = response.content.decode(response.encoding)
+		if response.encoding != 'ISO-8859-1':
+			content = response.content.decode(response.encoding)
+		elif requests.utils.get_encodings_from_content(str(response.content)) != []:
+			content = response.content.decode(requests.utils.get_encodings_from_content(str(response.content))[0])
+		else:
+			content = response.content.decode('utf-8')
 	except:
-		title = '？未知网页编码？'
+		if response.content == b'':
+			title = '！返回内容为空！'
+		else:
+			title = '？未知网页编码？'
+		out = url + ' ----- ' + str(response.status_code) + ' ----- ' + title
+		print(out)
+		log(out)
+		return True
+
+	if content == '':
+		title = '！返回内容为空！'
 		out = url + ' ----- ' + str(response.status_code) + ' ----- ' + title
 		print(out)
 		log(out)
@@ -92,3 +107,4 @@ if __name__ == '__main__':
 
 	if args['url'] != None:
 		bt(args['url'],proxies)
+
