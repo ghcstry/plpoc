@@ -14,6 +14,7 @@ def urls(path):
 def log(log):
 	with open('titlelog.txt','a+',encoding='utf-8') as f:
 		f.write(log + '\n')
+	return log
 
 def bt(url,proxies):
 	headers = {"Connection":"close","User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36","Accept-Encoding":"gzip, deflate","X-Forwarded-For":"127.0.0.1"}
@@ -52,14 +53,12 @@ def bt(url,proxies):
 			title = '！返回内容为空导致未知编码！'
 		else:
 			title = '？未知网页编码？'
-		print(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
-		log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
+		print(log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title))
 		return False
 
 	if content == '':
 		title = '！返回内容为空！'
-		print(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
-		log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
+		print(log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title))
 		return False
 
 	try:
@@ -69,8 +68,7 @@ def bt(url,proxies):
 			title = re.search('<title.*>.*</title>',content.replace('\n',''),re.I).group()
 		except:
 			title = '！标题匹配失败！'
-			print(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
-			log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
+			print(log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title))
 			return False
 
 	try:
@@ -79,9 +77,7 @@ def bt(url,proxies):
 		title = title.replace(tq,'').replace(th,'').replace('\r','').replace('\t','')
 	except:
 		title = '！获取标题错误！'
-
-	print(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
-	log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title)
+	print(log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title))
 	return True
 
 def pl(u,proxies,se):
