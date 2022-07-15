@@ -42,7 +42,7 @@ def bt(url,proxies):
 				return False
 
 	try:
-		if response.encoding != 'ISO-8859-1':
+		if response.encoding != 'ISO-8859-1' and response.encoding != None:
 			content = response.content.decode(response.encoding)
 		elif requests.utils.get_encodings_from_content(str(response.content)) != []:
 			content = response.content.decode(requests.utils.get_encodings_from_content(str(response.content))[0])
