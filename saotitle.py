@@ -72,9 +72,7 @@ def bt(url,proxies):
 			return False
 
 	try:
-		tq = re.search('<title.*?>',title,re.I).group()
-		th = re.search('</title>',title,re.I).group()
-		title = title.replace(tq,'').replace(th,'').replace('\r','').replace('\t','')
+		title = re.sub('<title.*?>|</title>|\r|\t','',title,flags=re.I)
 	except:
 		title = '！获取标题错误！'
 	print(log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title))
