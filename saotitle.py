@@ -52,7 +52,7 @@ def bt(url,proxies):
 		if response.content == b'':
 			title = '！返回内容为空导致未知编码！'
 		else:
-			title = '？未知网页编码？'
+			title = '！网页解码出错！'
 		print(log(url + ' ----- ' + str(response.status_code) + ' ----- ' + title))
 		return False
 
